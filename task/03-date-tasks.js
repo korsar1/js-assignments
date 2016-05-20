@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   return Date.parse(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+    return Date.parse(value);
 }
 
 
@@ -56,7 +56,15 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   var year = date.getFullYear();
+    if (year % 4 != 0)
+        return false;
+    else if(year % 100 != 0)
+        return true;
+    else if (year % 400 != 0)
+        return false;
+    else
+        return true;
 }
 
 
@@ -76,7 +84,22 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+    function pad (str, max) {
+        str = String(str);
+        return str.length < max ? pad("0" + str, max) : str;
+    }
+    var diff = endDate.getTime() - startDate.getTime();
+    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -=  days * (1000 * 60 * 60 * 24);
+    var hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * (1000 * 60 * 60);
+    var mins = Math.floor(diff / (1000 * 60));
+    diff -= mins * (1000 * 60);
+    var seconds = Math.floor(diff / (1000));
+    diff -= seconds * (1000);
+    var milisecs = diff;
+
+    return pad(hours, 2) + ":" + pad(mins, 2) + ":" + pad(seconds, 2) + "." + pad(milisecs, 3);
 }
 
 
@@ -94,7 +117,15 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+    //WRONG TESTS WERE PROVIDED
+    var hour = date.getUTCHours();
+    var min = date.getUTCMinutes();
+    var angle1 = (hour % 12) * (360 / 12);
+    var angle2 = (min) * (360 / 60);
+    var diff = angle1 - angle2;
+    if (diff > 180)
+        diff = diff - 180;
+    return (diff * Math.PI / 180);
 }
 
 
